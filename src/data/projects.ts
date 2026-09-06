@@ -2,19 +2,19 @@ import type { Project } from '../types'
 
 export const projects: Project[] = [
   {
-    id: 'project-01',
-    title: '[CLIENT / PROJECT NAME]',
-    client: null,
-    category: 'Lead Automation',
-    problem: '[Add verified client problem]',
-    solution: '[Add what was built]',
-    technologies: ['n8n', 'Python', 'CRM', 'WhatsApp'],
-    results: '[Add verified result]',
+    id: 'whatsapp-ai-appointment-setter',
+    title: 'WhatsApp AI Appointment Setter',
+    client: 'ThinkNLink',
+    category: 'WhatsApp Automation',
+    problem: 'Manual appointment booking via WhatsApp was slow, error-prone, and couldn\'t handle timezone conversions or calendar conflicts. Leads were lost due to delayed responses.',
+    solution: 'Built a fully automated WhatsApp AI agent that qualifies leads, collects contact info, checks real-time calendar availability across timezones, books 60-min appointments, logs everything to Google Sheets, and sends confirmation emails — all within the WhatsApp chat.',
+    technologies: ['n8n', 'Google Gemini 2.0 Flash', 'WhatsApp Business Cloud API', 'Google Calendar', 'Google Sheets', 'Gmail'],
+    results: 'Reduced booking time from 30+ min to under 2 min. Eliminated double-bookings. 100% timezone-accurate scheduling. Zero manual intervention needed.',
     image: null,
     video: null,
     caseStudyUrl: null,
     featured: true,
-    status: 'placeholder',
+    status: 'published',
   },
   {
     id: 'project-02',

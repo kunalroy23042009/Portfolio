@@ -2,10 +2,10 @@ import type { LiveSystem } from '../types'
 
 export const liveSystems: LiveSystem[] = [
   {
-    id: 'live-demo',
-    title: 'Live Demo',
-    placeholder: '[ADD LIVE DEMO]',
-    status: 'empty',
+    id: 'whatsapp-ai-demo',
+    title: 'WhatsApp AI Appointment Setter',
+    placeholder: '[LIVE: Try the demo flow]',
+    status: 'active',
   },
   {
     id: 'workflow-viz',

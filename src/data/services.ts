@@ -18,8 +18,7 @@ export const services: Service[] = [
     id: 'ai',
     number: '02',
     title: 'AI Automation',
-    description:
-      'Use AI for processes requiring understanding or decision-making.',
+    description: 'Use AI for processes requiring understanding or decision-making.',
     examples: [
       'AI assistants',
       'Document processing',
@@ -46,21 +45,20 @@ export const services: Service[] = [
     id: 'whatsapp',
     number: '04',
     title: 'WhatsApp Automation',
-    description: 'Build practical WhatsApp workflows.',
+    description: 'Build practical WhatsApp workflows — from simple notifications to AI agents that book appointments, qualify leads, and sync with your calendar.',
     examples: [
-      'Customer notifications',
-      'Lead responses',
-      'Appointment reminders',
-      'FAQs',
-      'Follow-ups',
+      'AI appointment booking (calendar + timezone aware)',
+      'Lead qualification & routing',
+      'Customer notifications & reminders',
+      'FAQ automation with memory',
+      'CRM & Sheets sync from chat',
     ],
   },
   {
     id: 'document-data',
     number: '05',
     title: 'Document & Data Automation',
-    description:
-      'Convert unstructured information into structured business data.',
+    description: 'Convert unstructured information into structured business data.',
     examples: [
       'PDFs → structured data',
       'Emails → database',
@@ -72,8 +70,7 @@ export const services: Service[] = [
     id: 'custom',
     number: '06',
     title: 'Custom Automation Systems',
-    description:
-      "Build custom software when no-code/low-code tools aren't enough.",
+    description: "Build custom software when no-code/low-code tools aren't enough.",
     examples: [
       'Python',
       'FastAPI',
