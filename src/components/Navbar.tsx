@@ -4,6 +4,7 @@ import { site } from '../data/site'
 import { useScrolled } from '../hooks/useScrollSpy'
 import { trackEvent } from '../lib/analytics'
 import { Button } from './ui/Button'
+import { ThemeToggle } from './ui/ThemeToggle'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -16,19 +17,16 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-warm-border bg-ink/80 backdrop-blur-xl'
-          : 'border-b border-transparent bg-transparent'
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 navbar ${scrolled ? 'scrolled' : ''}`}
+      role="banner"
     >
       <nav
-        className="section-container flex h-16 items-center justify-between md:h-[4.5rem]"
+        className="section-container flex h-16 items-center justify-between gap-4 md:h-[4.5rem]"
         aria-label="Main navigation"
       >
         <a
           href="#"
-          className="group flex flex-col leading-none"
+          className="group flex flex-col leading-none shrink-0"
           onClick={() => setOpen(false)}
         >
           <span className="font-display text-lg font-medium tracking-tight text-paper transition-colors group-hover:text-terracotta">
@@ -39,20 +37,22 @@ export function Navbar() {
           </span>
         </a>
 
-        <ul className="hidden items-center gap-8 md:flex">
-          {site.nav.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                className="text-sm text-warm-gray transition-colors hover:text-paper"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="hidden md:flex md:items-center md:gap-8 ml-auto">
+          <ul className="flex items-center gap-6">
+            {site.nav.map((item) => (
+              <li key={item.href}>
+                <a
+                  href={item.href}
+                  className="text-sm text-warm-gray transition-colors hover:text-paper"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        <div className="hidden md:block">
+          <ThemeToggle />
+
           <Button
             href="#contact"
             variant="primary"

@@ -1,5 +1,6 @@
 import { AutomationDemo } from './components/AutomationDemo'
 import { CaseStudies } from './components/CaseStudies'
+import { Chatbot } from './components/Chatbot'
 import { ClientLogos } from './components/ClientLogos'
 import { Contact } from './components/Contact'
 import { FAQ } from './components/FAQ'
@@ -12,6 +13,7 @@ import { Metrics } from './components/Metrics'
 import { Navbar } from './components/Navbar'
 import { ProblemSection } from './components/ProblemSection'
 import { Process } from './components/Process'
+import { ScrollProgress } from './components/ScrollProgress'
 import { Services } from './components/Services'
 import { Technology } from './components/Technology'
 import { Testimonials } from './components/Testimonials'
@@ -27,6 +29,7 @@ function App() {
       >
         Skip to main content
       </a>
+      <ScrollProgress />
       <Navbar />
       <main id="main-content">
         <Hero />
@@ -48,6 +51,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <Chatbot />
     </>
   )
 }
