@@ -53,6 +53,14 @@ export function Navbar() {
 
           <ThemeToggle />
 
+          <a
+            href="#privacy"
+            className="text-sm text-warm-gray transition-colors hover:text-paper"
+            aria-label="Privacy policy"
+          >
+            Privacy
+          </a>
+
           <Button
             href="#contact"
             variant="primary"
