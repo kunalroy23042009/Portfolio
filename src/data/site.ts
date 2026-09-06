@@ -12,6 +12,7 @@ export const site = {
     { label: 'Work', href: '#work' },
     { label: 'About', href: '#about' },
     { label: 'FAQ', href: '#faq' },
+    { label: 'Privacy', href: '#privacy' },
   ],
   contact: {
     email: null as string | null,
