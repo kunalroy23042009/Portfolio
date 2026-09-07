@@ -125,7 +125,7 @@ export function Chatbot() {
     }
   }
 
-  const initialMessage = "Hi! I'm FlowForge's AI assistant. Ask me about our automation services, book a consultation, or tell me about a process you'd like to automate."
+  const initialMessage = "Hi, I'm FlowForge's AI assistant. What should we automate first?"
   const lastMessage = messages[messages.length - 1]
   const awaitingFirstToken = isLoading && lastMessage?.role === 'assistant' && !lastMessage.content
 

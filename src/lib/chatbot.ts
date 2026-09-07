@@ -2,9 +2,9 @@ const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || ''
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 // Fast, low-latency model. Switch to 'llama-3.3-70b-versatile' if you need max quality.
 const GROQ_MODEL = 'llama-3.1-8b-instant'
-const REQUEST_TIMEOUT_MS = 15000
-const MAX_TOKENS = 256
-const MAX_HISTORY = 6
+const REQUEST_TIMEOUT_MS = 12000
+const MAX_TOKENS = 120
+const MAX_HISTORY = 4
 const MAX_CACHE_SIZE = 50
 
 export interface ChatMessage {
@@ -30,59 +30,51 @@ COMPANY CONTEXT:
 - Philosophy: Honest about what we can and can't do. No pricing without consultation. Focus on practical AI, not hype.
 
 YOUR ROLE:
-- Keep responses concise (2-3 sentences max)
-- Be helpful but not pushy
-- If they want pricing or a detailed quote, direct them to book a free consultation
-- Answer questions about workflow automation, AI agents, WhatsApp bots, and automation in general
-- If asked about specific pricing, project details, or capabilities beyond your knowledge, direct them to contact us or book a consultation
+- Reply like a fast chat assistant: 1-2 short sentences, under 40 words
+- Be helpful, never pushy; no filler openers, no repeated greetings
+- Pricing or detailed quotes → point to a free consultation
+- Beyond your knowledge → say so in one line and point to a consultation
 
 CONVERSATION STYLE:
-- Friendly, professional, and practical
-- Never fabricate client results, case studies, or specific metrics
-- If you don't know something exact, say so and direct to consultation
-- Always end responses by inviting further questions about their process`
+- Short, direct, practical. Never fabricate clients, metrics, or case studies.`
 
 const FALLBACK_ANSWER =
-  'Thanks for asking! I specialize in workflow automation, AI agents, and WhatsApp automation. What repetitive process is your team dealing with?'
+  "Got it — which repetitive task is eating your team's time most?"
 
 const BUSY_ANSWER =
-  "I'm getting a lot of questions right now — please try again in a moment, or book a free consultation and we'll walk through your process directly."
+  'Swamped right now — retry in a bit, or book a free consult below.'
 
 // Instant local answers for high-frequency intents: zero latency, zero API cost.
 const LOCAL_ANSWERS: Array<{ test: RegExp; answer: string }> = [
   {
     test: /pric|pricing|cost|quote|budget|charge|fee/,
     answer:
-      "We don't publish pricing since every project is different. Book a free consultation and we'll give you a clear estimate after understanding your process.",
+      'No fixed pricing — every project differs. Book a free consult for an exact estimate.',
   },
   {
     test: /whatsapp|appointment|booking|calendar|schedul/,
     answer:
-      'Our WhatsApp AI agent handles appointment booking, lead qualification, and calendar sync — all within the chat. Want to see a demo?',
+      'Our WhatsApp AI books appointments, qualifies leads, and syncs your calendar. Want a demo?',
   },
   {
     test: /\bn8n\b|make\.com|\bzapier\b|\bzap\b/,
-    answer:
-      'We use n8n, Make, and Zapier depending on the project. We choose the tool based on your process, not our preference.',
+    answer: 'We use n8n, Make, or Zapier — whichever fits your process best.',
   },
   {
     test: /\bai\b|agent|llm|gpt|rag|automat/,
-    answer:
-      'We build AI agents for document processing, classification, extraction, and intelligent routing. Practical AI — not hype.',
+    answer: 'We build practical AI agents: docs, classification, routing. No hype.',
   },
   {
     test: /book|consult|demo|call|meet|talk|contact/,
-    answer:
-      'Great! You can book a free consultation at the bottom of the page, or I can help you describe your process first.',
+    answer: "Book a free consult below — or describe your process and I'll pre-qualify it.",
   },
   {
     test: /^(hi|hey|hello|yo|sup|namaste)\b|\bhi\b.*\bthere\b/,
-    answer:
-      'Hi! Ask me about workflow automation, AI agents, WhatsApp bots, or tell me about a process you want to automate.',
+    answer: 'Hi! What repetitive task should we automate first?',
   },
   {
     test: /thank|thanks|shukriya|dhanyavad/,
-    answer: "You're welcome! Let me know if you have other questions.",
+    answer: 'Anytime! What else?',
   },
 ]
 
@@ -117,8 +109,8 @@ function buildMessages(
     { role: 'system', content: SYSTEM_PROMPT },
     ...history
       .slice(-MAX_HISTORY)
-      .map((m) => ({ role: m.role, content: m.content.slice(0, 600) })),
-    { role: 'user', content: message.trim().slice(0, 1000) },
+      .map((m) => ({ role: m.role, content: m.content.slice(0, 400) })),
+    { role: 'user', content: message.trim().slice(0, 600) },
   ]
 }
 
@@ -144,7 +136,7 @@ async function streamFromGroq(
     body: JSON.stringify({
       messages: payload,
       model: GROQ_MODEL,
-      temperature: 0.5,
+      temperature: 0.3,
       max_tokens: MAX_TOKENS,
       stream: true,
     }),
@@ -201,7 +193,7 @@ export async function streamChatMessage(
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
   options: StreamOptions = {}
 ): Promise<string> {
-  const clean = message.trim().slice(0, 1000)
+  const clean = message.trim().slice(0, 600)
   if (!clean) return FALLBACK_ANSWER
   const key = normalize(clean)
 

@@ -4,16 +4,24 @@ export function ScrollProgress() {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    let raf = 0
+
     const updateProgress = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPercent = scrollTop / docHeight
-      setProgress(Math.min(scrollPercent, 1))
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const scrollTop = window.scrollY
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight
+        const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0
+        setProgress(Math.min(Math.max(scrollPercent, 0), 1))
+      })
     }
 
     updateProgress()
     window.addEventListener('scroll', updateProgress, { passive: true })
-    return () => window.removeEventListener('scroll', updateProgress)
+    return () => {
+      window.removeEventListener('scroll', updateProgress)
+      cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (
