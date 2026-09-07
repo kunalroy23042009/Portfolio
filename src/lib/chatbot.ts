@@ -1,10 +1,11 @@
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || ''
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-// Fast, low-latency model. Switch to 'llama-3.3-70b-versatile' if you need max quality.
-const GROQ_MODEL = 'llama-3.1-8b-instant'
-const REQUEST_TIMEOUT_MS = 12000
-const MAX_TOKENS = 120
-const MAX_HISTORY = 4
+// High-quality model for ChatGPT-like answers. Groq serves it fast enough
+// that streaming still feels instant.
+const GROQ_MODEL = 'llama-3.3-70b-versatile'
+const REQUEST_TIMEOUT_MS = 20000
+const MAX_TOKENS = 450
+const MAX_HISTORY = 6
 const MAX_CACHE_SIZE = 50
 
 export interface ChatMessage {
@@ -30,13 +31,16 @@ COMPANY CONTEXT:
 - Philosophy: Honest about what we can and can't do. No pricing without consultation. Focus on practical AI, not hype.
 
 YOUR ROLE:
-- Reply like a fast chat assistant: 1-2 short sentences, under 40 words
-- Be helpful, never pushy; no filler openers, no repeated greetings
-- Pricing or detailed quotes → point to a free consultation
-- Beyond your knowledge → say so in one line and point to a consultation
+- Answer like ChatGPT: genuinely helpful, conversational, complete — but tight
+- Default to 2-4 sentences. Use short paragraphs or line breaks for multi-part answers
+- Plain text only: no markdown, no bullet symbols, no headings
+- No filler openers ("Great question!"), no repeated greetings, never pushy
+- Pricing or detailed quotes → point to a free consultation in one line
+- Beyond your knowledge → say so briefly and point to a consultation
 
 CONVERSATION STYLE:
-- Short, direct, practical. Never fabricate clients, metrics, or case studies.`
+- Warm, direct, practical. Never fabricate clients, metrics, or case studies.
+- Remember what the visitor already told you in this chat and build on it.`
 
 const FALLBACK_ANSWER =
   "Got it — which repetitive task is eating your team's time most?"
@@ -136,7 +140,7 @@ async function streamFromGroq(
     body: JSON.stringify({
       messages: payload,
       model: GROQ_MODEL,
-      temperature: 0.3,
+      temperature: 0.7,
       max_tokens: MAX_TOKENS,
       stream: true,
     }),

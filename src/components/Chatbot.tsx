@@ -33,6 +33,12 @@ const MessageRow = memo(function MessageRow({ role, content }: Message) {
 
 const MAX_STORED_MESSAGES = 60
 
+const QUICK_REPLIES = [
+  'What can you automate for my business?',
+  'How much does automation cost?',
+  'I want to book a consultation',
+]
+
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
@@ -78,9 +84,8 @@ export function Chatbot() {
     })
   }
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    const userMessage = input.trim()
+  const sendMessage = async (raw: string) => {
+    const userMessage = raw.trim()
     if (!userMessage || isLoading) return
 
     abortRef.current?.abort()
@@ -116,6 +121,13 @@ export function Chatbot() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    const text = input
+    setInput('')
+    void sendMessage(text)
   }
 
   const toggleChat = () => {
@@ -213,6 +225,22 @@ export function Chatbot() {
         {error && (
           <div className="chatbot-input-area" style={{ borderTopColor: '#dc3545' }}>
             <p style={{ color: '#dc3545', fontSize: '12px', margin: '0 0 8px', fontFamily: 'var(--font-mono)' }}>{error}</p>
+          </div>
+        )}
+
+        {messages.length === 0 && !isLoading && (
+          <div className="chatbot-chips" role="group" aria-label="Suggested questions">
+            {QUICK_REPLIES.map((reply) => (
+              <button
+                key={reply}
+                type="button"
+                className="chatbot-chip"
+                disabled={isLoading}
+                onClick={() => void sendMessage(reply)}
+              >
+                {reply}
+              </button>
+            ))}
           </div>
         )}
 
